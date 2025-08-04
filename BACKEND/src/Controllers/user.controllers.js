@@ -55,9 +55,8 @@ const loginUser = wrapperFunction(async (req, res) => {
             throw new ApiError(401, "Invalid email or password");
         }
 
-        const { accessToken, refreshToken } = generateAccessAndRefreshToken(
-            user._id
-        );
+        const { accessToken, refreshToken } =
+            await generateAccessAndRefreshToken(user._id);
 
         const updateUser = await User.findById(user._id).select(
             "-password -refreshToken"
@@ -75,4 +74,17 @@ const loginUser = wrapperFunction(async (req, res) => {
     }
 });
 
-export { registerUser, loginUser };
+const logoutUser = wrapperFunction(async (req, res) => {
+    await User.findByIdAndUpdate(
+        req.user._id,
+        { $set: { refreshToken: undefined } },
+        { new: true }
+    );
+
+    res.status(200)
+        .clearCookie("accessToken", cookieOptions)
+        .clearCookie("refreshToken", cookieOptions)
+        .json(new ApiResponse(200, {}, "Logout Successfully"));
+});
+
+export { registerUser, loginUser, logoutUser };
