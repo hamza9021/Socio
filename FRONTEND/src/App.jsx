@@ -1,5 +1,6 @@
 // src/App.jsx
 import { Routes, Route } from 'react-router-dom'
+import {Login, Signup} from './Components'
 
 
 function App() {
