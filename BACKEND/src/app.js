@@ -11,7 +11,10 @@ import {userRouter} from "./Routes/user.routes.js";
 
 const app = express();
 const corsOptions = {
-    origin: process.env.CORS_ORIGIN,
+    origin: [process.env.CORS_ORIGIN, process.env.CORS_LOCAL], 
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
 };
 
 app.use(express.urlencoded({ extended: true }));

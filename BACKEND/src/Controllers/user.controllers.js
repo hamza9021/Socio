@@ -33,7 +33,7 @@ const registerUser = wrapperFunction(async (req, res) => {
 
         return res
             .status(201)
-            .json(new ApiResponse(201, "User created successfully", user));
+            .json(new ApiResponse(201, user, "User created successfully"));
     } catch (error) {
         console.log(error);
     }
@@ -67,7 +67,7 @@ const loginUser = wrapperFunction(async (req, res) => {
             .cookie("refreshToken", refreshToken, cookieOptions)
             .status(200)
             .json(
-                new ApiResponse(200, updateUser, "User Logged In Successfully")
+                new ApiResponse(200, "User Logged In Successfully", updateUser)
             );
     } catch (error) {
         console.log(error);
@@ -84,7 +84,24 @@ const logoutUser = wrapperFunction(async (req, res) => {
     res.status(200)
         .clearCookie("accessToken", cookieOptions)
         .clearCookie("refreshToken", cookieOptions)
-        .json(new ApiResponse(200, {}, "Logout Successfully"));
+        .json(new ApiResponse(200, "Logout Successfully", {}));
 });
 
-export { registerUser, loginUser, logoutUser };
+const getUserProfile = wrapperFunction(async (req, res) => {
+    const user = req.user;
+    console.log("user", user);
+    if (!user) {
+        throw new ApiError(401, "Unauthorized Please Log in");
+    }
+    if (!User.findById(user._id)) {
+        throw new ApiError(401, "Unauthorized");
+    }
+    const updatedUser = await User.findById(user._id).select(
+        "-password -refreshToken"
+    );
+    return res
+        .status(200)
+        .json(new ApiResponse(200, "User Profile Found", updatedUser));
+});
+
+export { registerUser, loginUser, logoutUser, getUserProfile };

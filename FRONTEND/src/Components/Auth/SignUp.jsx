@@ -1,7 +1,7 @@
 // src/pages/Signup.jsx
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../../utils/axios.instance";
 import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
@@ -22,7 +22,7 @@ export default function Signup() {
 
   const navigate = useNavigate();
 
-  function handleFormSubmit(event) {
+  async function handleFormSubmit(event) {
     event.preventDefault();
     console.log(userData);
     if (
@@ -35,17 +35,16 @@ export default function Signup() {
       return;
     }
 
-    axios
-      .post("http://localhost:8080/api/v1/users/register", userData)
-      .then((response) => {
-        console.log(response.data);
-        alert("Registration successful!");
-        navigate("/login");
-      })
-      .catch((error) => {
-        console.error(error);
-        alert("Registration failed. Please try again.");
-      });
+    try {
+      const response = await axiosInstance.post(
+        "/api/v1/users/register",
+        userData
+      );
+      navigate("/login");
+      console.log(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
