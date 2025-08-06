@@ -2,29 +2,30 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axiosInstance from "../../utils/axios.instance";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function Login() {
-
   const navigate = useNavigate();
-  const [userData,setUserData] = useState({email:"",password:""});
-  const changeHandler = (e)=>{
+  const [userData, setUserData] = useState({ email: "", password: "" });
+  const changeHandler = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
-  }
+  };
 
-  const handleFormData = async (event)=>{
-     event.preventDefault();
-        try {
-            const response = await axiosInstance.post(
-                "/api/v1/users/login",
-                userData
-            );
-            console.log(response.data.data);
-            navigate("/settings");
-        } catch (error) {
-          console.log(error);
-        } 
-  }
+  const handleFormData = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axiosInstance.post(
+        "/api/v1/users/login",
+        userData
+      );
+      console.log(response.data.data);
+      toast.success(`${response.data.data.full_name} Welcome To Socio`);
+      navigate("/settings");
+    } catch (error) {
+      toast.error("Internal Server Error");
+    }
+  };
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <div className="w-full max-w-md p-8 bg-white shadow-md rounded-md">

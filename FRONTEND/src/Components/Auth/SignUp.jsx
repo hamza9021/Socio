@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axiosInstance from "../../utils/axios.instance";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function Signup() {
   const [userData, setUserData] = useState({
@@ -31,7 +32,7 @@ export default function Signup() {
       !userData.password ||
       !userData.full_name
     ) {
-      alert("Please fill in all fields");
+      toast.error("Please fill in all fields.");
       return;
     }
 
@@ -40,10 +41,13 @@ export default function Signup() {
         "/api/v1/users/register",
         userData
       );
-      navigate("/login");
       console.log(response.data.data);
+      toast.success("Account created successfully! Please log in.");
+      navigate("/login");
     } catch (error) {
       console.log(error);
+      const errorMessage = error.response?.data?.message || "Failed to create account. Please try again.";
+      toast.error(errorMessage);
     }
   }
 
