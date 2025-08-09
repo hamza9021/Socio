@@ -51,7 +51,7 @@ const loginUser = wrapperFunction(async (req, res) => {
             throw new ApiError(401, "Invalid email or password");
         }
 
-        if (!user.isPasswordMatch(password)) {
+        if (!(await user.isPasswordMatch(password))) {
             throw new ApiError(401, "Invalid email or password");
         }
 
@@ -104,4 +104,33 @@ const getUserProfile = wrapperFunction(async (req, res) => {
         .json(new ApiResponse(200, "User Profile Found", updatedUser));
 });
 
-export { registerUser, loginUser, logoutUser, getUserProfile };
+
+const updateUserPassword = wrapperFunction(async (req, res) => {
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+        throw new ApiError(400, "Please fill all the fields");
+    }
+
+    const user = await User.findById(req.user._id);
+    if (!user) {
+        throw new ApiError(404, "You are not authorized to update this user");
+    }
+
+    if (!(await user.isPasswordMatch(currentPassword))) {
+        throw new ApiError(401, "Incorrect Password");
+    }
+
+    if (newPassword !== confirmPassword) {
+        throw new ApiError(400, "Password and Confirm Password should be same");
+    }
+
+    user.password = newPassword;
+    await user.save({ validateBeforeSave: false });
+
+    res.status(200).json(
+        new ApiResponse(200, {}, "Password Updated Successfully")
+    );
+});
+
+export { registerUser, loginUser, logoutUser, getUserProfile, updateUserPassword };
