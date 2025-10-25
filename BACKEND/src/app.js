@@ -7,11 +7,11 @@ dotenv.config({ path: "./.env" });
 
 
 // -------------------IMPORT ROUTES-------------------
-import {userRouter} from "./Routes/user.routes.js";
+import { userRouter } from "./Routes/user.routes.js";
 
 const app = express();
 const corsOptions = {
-    origin: [process.env.CORS_ORIGIN, process.env.CORS_LOCAL], 
+    origin: [process.env.CORS_ORIGIN, process.env.CORS_LOCAL],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -24,7 +24,7 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 
 
-app.use("/api/v1/users",userRouter);
+app.use("/api/v1/users", userRouter);
 
 
 
