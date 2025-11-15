@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import { RegisterPage, LoginPage } from "./Pages";
+import { RegisterPage, LoginPage, HomePage } from "./Pages";
 
 
 export default function App() {
@@ -11,6 +11,7 @@ export default function App() {
       <Routes>
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/" element={<HomePage />} />
       </Routes>
     </>
   );

@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Input, Button, Form, Spinner } from "../../Components";
 import User from "../../Apis/User/User.Apis";
+import { useDispatch } from "react-redux";
+import { login } from "../../features/user/userSlice";
 
 const LoginPage = () => {
     const [formData, setFormData] = useState({
@@ -11,6 +13,7 @@ const LoginPage = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleInputChanges = (e) => {
         setFormData({
@@ -25,10 +28,10 @@ const LoginPage = () => {
 
         try {
             const response = await User.loginUser(formData);
-            if (response.status === 201) {
-                navigate("/");
-            } else {
-                console.log("Login failed: ", response.data);
+            if (response) {
+                const userInfo = response.data?.data;
+                dispatch(login(userInfo));
+                // navigate("/");
             }
         } catch (error) {
             console.log("Login error: ", error);

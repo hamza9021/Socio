@@ -43,6 +43,7 @@ const registerUser = wrapperFunction(async (req, res) => {
 const loginUser = wrapperFunction(async (req, res) => {
     try {
         const { email, password } = req.body;
+        console.log(email);
         if (!email || !password) {
             throw new ApiError(401, "Please fill all the fields");
         }

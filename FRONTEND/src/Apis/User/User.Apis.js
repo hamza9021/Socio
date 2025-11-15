@@ -1,6 +1,4 @@
 import axiosInstance from "../../utils/axios.instance";
-import { login, logout } from "../../features/user/userSlice"
-import { useDispatch, useSelector } from "react-redux";
 
 class User {
 
@@ -31,10 +29,6 @@ class User {
 
     try {
       const response = await axiosInstance.post("/api/v1/users/login", data);
-      if (response && response.data.data) {
-        const userInfo = response.data.data;
-        dispatch(login(userInfo));
-      }
       return response;
     } catch (error) {
       return error.response;
