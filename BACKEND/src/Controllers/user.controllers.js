@@ -29,11 +29,12 @@ const registerUser = wrapperFunction(async (req, res) => {
             email,
             password,
             full_name,
+            refreshToken: ""
         });
 
         return res
             .status(201)
-            .json(new ApiResponse(201, user, "User created successfully"));
+            .json(new ApiResponse(201, "User created successfully", user));
     } catch (error) {
         console.log(error);
     }

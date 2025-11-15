@@ -27,6 +27,9 @@ const userSchema = new Schema(
             type: String,
             default: "https://avatars.githubusercontent.com/u/155261523?v=4",
         },
+        refreshToken: {
+            type: String
+        },
         is_private: {
             type: Boolean,
             default: false,
@@ -65,8 +68,9 @@ userSchema.methods.generateAccessToken = function () {
 };
 
 userSchema.methods.generateRefreshToken = function () {
+    console.log("Generating refresh token",process.env.REFRESH_TOKEN_SECRET);
     return jwt.sign(
-        { _id: this._id, email: this.email, name: this.name },
+        { _id: this._id, email: this.email, full_name: this.full_name },
         process.env.REFRESH_TOKEN_SECRET,
         { expiresIn: process.env.REFRESH_TOKEN_EXPIRY }
     );

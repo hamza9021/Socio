@@ -1,5 +1,12 @@
-import Login from "./Auth/Login";
-import Signup from "./Auth/SignUp";
-import Settings from "./Pages/Settings";
+import Button from './Button';
+import Input from './Input';
+import Form from './Form';
+import Spinner from './Spinner';
 
-export { Login, Signup , Settings};
+
+export {
+    Button,
+    Input,
+    Form,
+    Spinner
+}
