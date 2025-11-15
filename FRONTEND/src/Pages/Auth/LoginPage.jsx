@@ -31,7 +31,7 @@ const LoginPage = () => {
             if (response) {
                 const userInfo = response.data?.data;
                 dispatch(login(userInfo));
-                // navigate("/");
+                navigate("/");
             }
         } catch (error) {
             console.log("Login error: ", error);

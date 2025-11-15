@@ -2,10 +2,6 @@ import axiosInstance from "../../utils/axios.instance";
 
 class User {
 
-  constructor() {
-    this.dispatch = useDispatch();
-    this.userState = useSelector((state) => state.user);
-  }
   static async registerUser(data) {
     try {
 
@@ -29,6 +25,15 @@ class User {
 
     try {
       const response = await axiosInstance.post("/api/v1/users/login", data);
+      return response;
+    } catch (error) {
+      return error.response;
+    }
+  }
+
+  static async logoutUser() {
+    try {
+      const response = await axiosInstance.post("/api/v1/users/logout");
       return response;
     } catch (error) {
       return error.response;
